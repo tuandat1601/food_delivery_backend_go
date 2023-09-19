@@ -1,0 +1,80 @@
+Bảng Nhà Hàng (Restaurants):
+
+RestaurantID (Primary Key)
+Tên nhà hàng (Name)
+Địa chỉ (Address)
+Số điện thoại (Phone)
+Email
+Thời gian hoạt động (Operating Hours)
+...
+Bảng Thực Đơn (Menus):
+
+MenuID (Primary Key)
+Tên thực đơn (Name)
+Mô tả (Description)
+Giá trung bình (Average Price)
+RestaurantID (Foreign Key, liên kết với Bảng Nhà Hàng)
+...
+Bảng Món Ăn (Dishes):
+
+DishID (Primary Key)
+Tên món ăn (Name)
+Mô tả (Description)
+Giá (Price)
+MenuID (Foreign Key, liên kết với Bảng Thực Đơn)
+...
+Bảng Đặt Hàng (Orders):
+
+OrderID (Primary Key)
+Ngày đặt hàng (Order Date)
+Trạng thái đơn hàng (Order Status)
+Khách hàng (CustomerID, Foreign Key)
+...
+Bảng Chi Tiết Đơn Hàng (OrderDetails):
+
+OrderDetailID (Primary Key)
+OrderID (Foreign Key, liên kết với Bảng Đặt Hàng)
+DishID (Foreign Key, liên kết với Bảng Món Ăn)
+Số lượng (Quantity)
+Tổng tiền (Total Amount)
+...
+Bảng Khách Hàng (Customers):
+
+CustomerID (Primary Key)
+Tên khách hàng (Name)
+Địa chỉ (Address)
+Số điện thoại (Phone)
+Email
+...
+Bảng Người Dùng (Users):
+
+UserID (Primary Key)
+Tên người dùng (Username)
+Mật khẩu (Password, có thể được băm và mã hóa)
+Vai trò người dùng (User Role)
+...
+Bảng Đánh Giá (Reviews):
+
+ReviewID (Primary Key)
+Nội dung đánh giá (Review Content)
+Điểm đánh giá (Rating)
+Thời gian đánh giá (Review Date)
+UserID (Foreign Key, liên kết với Bảng Người Dùng)
+RestaurantID (Foreign Key, liên kết với Bảng Nhà Hàng)
+...
+
+
+project/
+├── cmd/              <- Thư mục chứa tệp chính của ứng dụng.
+│   └── main.go       <- Tệp chính, điểm khởi đầu của ứng dụng.
+├── internal/         <- Thư mục chứa mã nguồn bên trong ứng dụng.
+│   ├── config/       <- Thư mục chứa cấu hình ứng dụng.
+│   ├── middleware/   <- Thư mục chứa các middleware của ứng dụng.
+│   ├── models/       <- Thư mục chứa các mô hình dữ liệu (structs).
+│   ├── repositories/ <- Thư mục chứa lớp truy cập dữ liệu (repository).
+│   ├── routes/       <- Thư mục chứa các tuyến đường và xử lý tuyến đường (routes).
+│   ├── services/     <- Thư mục chứa các dịch vụ (services) xử lý logic.
+│   └── usecase/      <- Thư mục chứa các usecase (business logic).
+├── static/           <- Thư mục chứa tài liệu tĩnh như hình ảnh, CSS, JavaScript.
+├── templates/        <- Thư mục chứa các mẫu HTML hoặc tệp giao diện.
+└── main.go           <- Tệp chính, điểm khởi đầu của ứng dụng.
