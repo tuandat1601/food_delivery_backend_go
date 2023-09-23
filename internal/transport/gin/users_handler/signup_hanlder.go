@@ -14,14 +14,11 @@ import (
 )
 
 func SignUp(db *gorm.DB) func( c *gin.Context) {
-
 	return func(c *gin.Context) {
-
 		var data model.User
 		if err := c.ShouldBind(&data); err != nil {
 			return 
 		}
-
 		store:=repositories.NewSQLStore(db)
 		business:=users_biz.NewSignUpUser(store)
 		if err:=business.SignUpUser(c.Request.Context(),&data);err!=nil{

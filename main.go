@@ -1,12 +1,14 @@
 package main
 
 import (
-	"food_delivery/internal/model"
+	"fmt"
 	"food_delivery/internal/routes"
 	"log"
-	"net/http"
+
+	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -15,13 +17,23 @@ type TableName struct {
 }
 
 func main() {
-
-	dsn := "host=localhost user=tuandat password=tuandat1601 dbname=mydatabase port=5433 sslmode=disable TimeZone=Asia/Shanghai"
+	err:= godotenv.Load("app.env")
+	if err != nil {
+		log.Fatal("Error loading .env file:", err)
+	}
+	
+	port :=os.Getenv("PORT")
+	postgresUser :=os.Getenv("POSTGRES_USER")
+	postgresPort :=os.Getenv("POSTGRES_PORT")
+	postgresHost :=os.Getenv("POSTGRES_HOST")
+	postgresPassword :=os.Getenv("POSTGRES_PASSWORD")
+	postgresDB :=os.Getenv("POSTGRES_DB")
+	dsn :=fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Shanghai",postgresHost,postgresUser,postgresPassword,postgresDB,postgresPort)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalln("Cannot connect to POSTGRES:", err)
 	}
-	log.Println("Connected:", db)
+	log.Println("Connected:", db,port)
 	r := gin.Default()
 
 	var tableNames []TableName
@@ -29,8 +41,6 @@ func main() {
 	if result.Error != nil {
 		log.Fatal(result.Error)
 	}
-
-	// Xử lý danh sách tên các bảng
 	var tableList string
 	for _, tableName := range tableNames {
 		tableList += tableName.TableName + "\n"
@@ -40,23 +50,6 @@ func main() {
 	r.GET("/tables", func(c *gin.Context) {
 		c.String(200, "Danh sách các bảng:\n%s", tableList)
 	})
-	r.POST("/auth", postAuth(db))
-	r.Run()
-}
-func postAuth(db *gorm.DB) func (*gin.Context){
 	
-	return func (c *gin.Context){
-
-		var newuser  model.User
-		if err := c.ShouldBind(&newuser); err != nil {
-			return
-		    }
-
-		    if err := db.Table("users").Create(&newuser).Error; err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{"data": newuser})
-	}
-
+	r.Run((":"+port))
 }
