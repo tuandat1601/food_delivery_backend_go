@@ -10,7 +10,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
-
+// @Summary Xóa người dùng theo ID
+// @Description Xóa người dùng theo ID
+// @Produce json
+// @Tags User
+// @Param id path int true "ID của người dùng"
+// @Success 200 {object} map[string]string "Deleted successfully"
+// @Failure 400 {object} map[string]string "Fail"
+// @Router /v1/users/:id [patch]
 func DeletedUserById(db *gorm.DB) func(c * gin.Context){
 	return func (c * gin.Context){
 		id, err := strconv.Atoi(c.Param("id"))

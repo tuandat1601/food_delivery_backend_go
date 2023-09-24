@@ -9,7 +9,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
-
+// @Summary Liệt kê danh sách người dùng
+// @Description Liệt kê danh sách người dùng thỏa mãn các điều kiện
+// @Produce json
+// @Tags User
+// @Param is_deleted query bool false "Lọc người dùng đã xóa"
+// @Success 200 {object} []model.User "Danh sách người dùng"
+// @Failure 400 {object} map[string]string "Lỗi liệt kê người dùng"
+// @Router /v1/users/list [get]
 func ListUser(db *gorm.DB) func(c * gin.Context){
 	return func (c * gin.Context){
 		

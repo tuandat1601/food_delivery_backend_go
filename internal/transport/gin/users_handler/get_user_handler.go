@@ -10,7 +10,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
-
+// @Summary Lấy thông tin người dùng theo ID
+// @Description Lấy thông tin người dùng theo ID
+// @Produce json
+// @Tags User
+// @Param id path int true "ID của người dùng"
+// @Success 200 {object} model.User "Thông tin người dùng"
+// @Failure 400 {object} map[string]string "Lỗi lấy thông tin người dùng"
+// @Router /v1/users/:id [get]
 func GetUserById(db *gorm.DB) func(c * gin.Context){
 	return func (c * gin.Context){
 		id, err := strconv.Atoi(c.Param("id"))

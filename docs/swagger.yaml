@@ -1,0 +1,258 @@
+definitions:
+  model.Restaurant:
+    properties:
+      address:
+        type: string
+      closing_time:
+        type: string
+      created_at:
+        type: string
+      day_of_week:
+        type: string
+      id:
+        type: integer
+      is_deleted:
+        type: boolean
+      name:
+        type: string
+      opening_time:
+        type: string
+      phone:
+        type: string
+      updated_ad:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  model.User:
+    properties:
+      address:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      is_deleted:
+        type: boolean
+      password:
+        type: string
+      phone:
+        type: string
+      role:
+        type: string
+      updated_ad:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/users/:id:
+    get:
+      description: Lấy thông tin người dùng theo ID
+      parameters:
+      - description: ID của người dùng
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Thông tin người dùng
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Lỗi lấy thông tin người dùng
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Lấy thông tin người dùng theo ID
+      tags:
+      - User
+    patch:
+      description: Xóa người dùng theo ID
+      parameters:
+      - description: ID của người dùng
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Fail
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Xóa người dùng theo ID
+      tags:
+      - User
+  /v1/users/{id}/restaurant/{restaurant_id}:
+    get:
+      consumes:
+      - application/json
+      description: Lấy thông tin nhà hàng bằng ID từ cơ sở dữ liệu
+      parameters:
+      - description: ID của người dùng
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: ID của nhà hàng
+        in: path
+        name: restaurant_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Thông tin nhà hàng
+          schema:
+            $ref: '#/definitions/model.Restaurant'
+        "400":
+          description: Lỗi lấy thông tin người dùng
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Lấy thông tin nhà hàng bằng ID
+      tags:
+      - Restaurant
+  /v1/users/{id}/restaurant/create:
+    post:
+      parameters:
+      - description: Tên nhà hàng
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: Địa chỉ nhà hàng
+        in: body
+        name: address
+        required: true
+        schema:
+          type: string
+      - description: Số điện thoại liên hệ
+        in: body
+        name: phone
+        required: true
+        schema:
+          type: string
+      - description: Email liên hệ
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: 'Ngày mở cửa (mặc định: ''monday to saturday'')'
+        in: body
+        name: day_of_week
+        schema:
+          type: string
+      - description: 'Thời gian mở cửa (mặc định: ''7AM'')'
+        in: body
+        name: opening_time
+        schema:
+          type: string
+      - description: 'Thời gian đóng cửa (mặc định: ''22PM'')'
+        in: body
+        name: closing_time
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Nhà hàng được tạo thành công
+          schema:
+            $ref: '#/definitions/model.Restaurant'
+        "400":
+          description: Lỗi trong quá trình tạo nhà hàng
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+  /v1/users/list:
+    get:
+      description: Liệt kê danh sách người dùng thỏa mãn các điều kiện
+      parameters:
+      - description: Lọc người dùng đã xóa
+        in: query
+        name: is_deleted
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Danh sách người dùng
+          schema:
+            items:
+              $ref: '#/definitions/model.User'
+            type: array
+        "400":
+          description: Lỗi liệt kê người dùng
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Liệt kê danh sách người dùng
+      tags:
+      - User
+  /v1/users/logout:
+    get:
+      description: Đăng xuất người dùng và hủy mã thông báo truy cập
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: logout success
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Đăng xuất người dùng
+      tags:
+      - User
+  /v1/users/signup:
+    post:
+      consumes:
+      - application/json
+      description: Đăng ký một người dùng mới
+      parameters:
+      - description: Thông tin người dùng
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Người dùng đã đăng ký thành công
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Lỗi đăng ký người dùng
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Đăng ký người dùng
+      tags:
+      - User
+swagger: "2.0"

@@ -12,7 +12,15 @@ import (
 	
 	"gorm.io/gorm"
 )
-
+// @Summary Đăng ký người dùng
+// @Description Đăng ký một người dùng mới
+// @Param user body model.User true "Thông tin người dùng"
+// @Accept json
+// @Produce json
+// @Tags User
+// @Success 200 {object} model.User "Người dùng đã đăng ký thành công"
+// @Failure 400 {object} map[string]string "Lỗi đăng ký người dùng"
+// @Router /v1/users/signup [post]
 func SignUp(db *gorm.DB) func( c *gin.Context) {
 	return func(c *gin.Context) {
 		var data model.User

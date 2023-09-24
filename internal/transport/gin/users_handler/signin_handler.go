@@ -1,6 +1,7 @@
 package users_handler
 
 import (
+	"food_delivery/common"
 	"food_delivery/config"
 	"food_delivery/internal/biz/users_biz"
 	"food_delivery/internal/model"
@@ -12,6 +13,17 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
+
+// SignIn godoc
+// @Summary Sign in
+// @Description Sign in a user and return an access token
+// @Accept json
+// @Produce json
+// @Param user body model.User true "User credentials"
+// @Success 200 {object} common.DataResponseLogin "Sign-in successful"
+// @Failure 400 {object} map[string]string "Lỗi đăng ký người dùng"
+
+// @Router /v1/users/signin [post]
 
 func SignIn(db *gorm.DB) func(c *gin.Context) {
 
@@ -54,7 +66,11 @@ func SignIn(db *gorm.DB) func(c *gin.Context) {
 		c.SetCookie("access_token", access_token, config.AccessTokenMaxAge*60, "/", "localhost", false, true)
 		c.SetCookie("refresh_token", refresh_token, config.RefreshTokenMaxAge*60, "/", "localhost", false, true)
 		c.SetCookie("logged_in", "true", config.AccessTokenMaxAge*60, "/", "localhost", false, false)
-		c.JSON(http.StatusOK, gin.H{"status": "success", "access_token": access_token})
+		response := common.DataResponseLogin{
+			Status:      200,
+			AccessToken: access_token,
+		    }
+		c.JSON(http.StatusOK, response)
 	}
 
 }

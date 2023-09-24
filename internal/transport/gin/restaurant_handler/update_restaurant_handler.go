@@ -11,12 +11,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
-// @Summary Create a new restaurant
-// @Description Creat a new restaurant from user
-// @Tags Restaurant
+// UpdateRestaurant godoc
+// @Summary Update infomation of restaurant
+// @Description Update infomation of restaurant
 // @Accept  json
 // @Produce  json
-
+// @Tags Restaurant 
 // @Param name body string true "Name of restaurant"
 // @Param address body string true "Address of restaurant"
 // @Param phone body string true "phone number"
@@ -25,27 +25,30 @@ import (
 // @Param closing_time body string false "Time closing (default: '22PM')"
 // @Success 200 {object} model.Restaurant "Successfully"
 // @Failure 400 {object} map[string]string "fail"
-// @Router /v1/users/{id}/restaurant/create [post]
-func CreateRestaurant(db *gorm.DB) func(c *gin.Context) {
+// @Router /v1/users/{id}/restaurant/{restaurant_id}/update [patch]
+
+func UpdateRestaurantById(db *gorm.DB) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		id, err := strconv.Atoi(c.Param("id"))
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+		res_id, errd := strconv.Atoi(c.Param("restaurant_id"))
+		if errd != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": errd.Error()})
+			return
+		}
 		var data model.Restaurant
-		data.UserId = id
-		data.DayOfWeek="monday to saturday"
-		data.OpeningTime="7AM"
-		data.ClosingTime="22PM"
+		
 		
 		if err := c.ShouldBind(&data); err != nil {
 			return
 		}
 		store := repositories.NewSQLStore(db)
 
-		business := restaurantbiz.NewCreateRestaurant(store)
-		if err := business.CreateNewRestaurant(c.Request.Context(),&data);err!=nil{
+		business := restaurantbiz.NewUpdateRestaurant(store)
+		if err := business.UpdateNewRestaurant(c.Request.Context(),id,res_id,&data);err!=nil{
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
 			})

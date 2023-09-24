@@ -33,17 +33,18 @@ CREATE TABLE "users"(
 );
 ALTER TABLE
     "User" ADD PRIMARY KEY("id");
-CREATE TABLE "Restaurants"(
-    "id" BIGINT NOT NULL,
+CREATE TABLE "restaurants"(
+    "id" SERIAL PRIMARY KEY,
     "name" VARCHAR(255) NOT NULL,
     "address" VARCHAR(255) NOT NULL,
-    "phonenumber" VARCHAR(255) NOT NULL,
-    "created_at" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
-    "updated_at" TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL,
-    "manager_id" BIGINT NOT NULL,
+    "phone" VARCHAR(255) NOT NULL,
+    "user_id" BIGINT NOT NULL,
     "day_of_week" VARCHAR(255) NOT NULL,
     "opening_time" VARCHAR(255) NOT NULL,
-    "closing_time" VARCHAR(255) NOT NULL
+    "closing_time" VARCHAR(255) NOT NULL,
+    "is_deleted" BOOLEAN DEFAULT false,
+    "created_at"TIMESTAMPTZ DEFAULT NOW(),
+    "updated_at" TIMESTAMPTZ DEFAULT NOW()
 );
 ALTER TABLE
     "Restaurants" ADD PRIMARY KEY("id");
