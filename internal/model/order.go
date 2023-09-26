@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type orders struct {
+type order struct {
 	Id         int          `json:"id" gorm:"column:id"`
 	UserId     int          `json:"user_id" gorm:"column:user_id"`
 	OrderTime  *time.Time   `json:"order_id" gorm:"column:order_time"`

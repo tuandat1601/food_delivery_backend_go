@@ -2,7 +2,7 @@ package model
 
 import "food_delivery/common"
 
-type Foods struct {
+type Food struct {
 	common.SQLModel
 	Name        string       `json:"name" gorm:"column:name"`
 	Description string       `json:"description" gorm:"column:description"`

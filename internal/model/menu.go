@@ -5,7 +5,7 @@ import (
 	
 )
 
-type Menus struct {
+type Menu struct {
 	common.SQLModel
 	Name         string   `json:"name" gorm:"column:name"`
 	Description  string   `json:"description" gorm:"column:description"`
